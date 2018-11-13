@@ -9,7 +9,7 @@ import urllib3
 
 from pathlib import Path
 
-proxy_url = "http://94.243.140.162:40960"
+proxy_url = "http://94.243.140.162:40960" # http://proxy_server:port
 telepot.api._pools = {
     'default': urllib3.ProxyManager(proxy_url=proxy_url, num_pools=3, maxsize=10, retries=False, timeout=80),
 }
@@ -31,7 +31,7 @@ def handle(msg):
         bot.sendMessage(chat_id, str('Hi'))
         
 
-bot=telepot.Bot('522725344:AAGyVp0GjWPzYvW_BKaL3qBEj-ibOiXxwWY') #@RaspberrySerjTestBot
+bot=telepot.Bot('522725344:AAGyVp0GjWPzYvW_BKaL3qBEj-ibOiXxwWY') # @RaspberrySerjTestBot
 print(bot.getMe())
 
 
