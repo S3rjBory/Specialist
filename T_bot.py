@@ -32,20 +32,51 @@ def handle(msg):
     #print(command)
 
     if content_type == 'text':
-        command=msg['text']
+        command = msg['text']
+        words = command.split(' ')
+        
+        if len(words) >= 2:
+            first_word = words[0]
+            second_word = words[1]
+            print(first_word)
+            print(second_word)
+        else:
+            first_word = 'None'
+            second_word = 'None'
+        
         if command == 'hi':
             bot.sendMessage(chat_id, str('Hi '+msg['from']['first_name']+' ' +msg['from']['last_name']))
+        
         if command == 'id':
             file_id = msg['chat']['id']
             print(chat_id)
             bot.sendMessage(chat_id, str(file_id))
-       # bot.sendDocument(chat_id, open("/ICON.ICO", 'rb'))
+                                                           # bot.sendDocument(chat_id, open("/ICON.ICO", 'rb'))
         if command == 'pogoda':
             a = pogoda()
             bot.sendMessage(chat_id, str(a))
-    
+
+        if (first_word == 'download')&(second_word =='doc'):
+            d = words[2]
+            bot.sendDocument(chat_id, open('C:/tmp/'+chat_idint+'/doc/'+d, 'rb'))
+
+        if (first_word == 'ls')&(second_word == 'doc'):
+            ls = os.listdir('C:/tmp/'+chat_idint+'/doc')
+            print(ls)
+            bot.sendMessage(chat_id, str(ls))
+
+        if (first_word == 'download')&(second_word =='img'):
+            d = words[2]
+            bot.sendPhoto(chat_id, open('C:/tmp/'+chat_idint+'/img/'+d+'.png', 'rb'))  # доработать этот блок норм. С выбором по номеру картинку, например
+
+        if (first_word == 'ls')&(second_word == 'img'):
+            ls = os.listdir('C:/tmp/'+chat_idint+'/img')
+            print(ls)
+            bot.sendMessage(chat_id, str(ls))
+
     if content_type == 'photo':
         print(msg)
+        
         try:
             os.mkdir('C:/tmp/'+chat_idint+'/img', mode=0o777)
         except OSError as error:
@@ -85,7 +116,7 @@ def pogoda():
            n+=1
     return pogoda_last
 
-bot = telepot.Bot('522725344:AAGyVp0GjWPzYvW_BKaL3qBEj-ibOiXxwWY') #@RaspberrySerjTestBot
+bot=telepot.Bot('522725344:AAGyVp0GjWPzYvW_BKaL3qBEj-ibOiXxwWY') #@RaspberrySerjTestBot
 print(bot.getMe())
 
 MessageLoop(bot, handle).run_as_thread()
