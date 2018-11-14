@@ -4,11 +4,9 @@ import datetime
 import telepot
 from telepot.loop import MessageLoop
 import requests, json
-
+from weather import Weather, Unit
 import urllib3
-
 from pathlib import Path
-
 import os
 
 proxy_url = "http://94.243.140.162:40960"
@@ -42,6 +40,10 @@ def handle(msg):
             print(chat_id)
             bot.sendMessage(chat_id, str(file_id))
        # bot.sendDocument(chat_id, open("/ICON.ICO", 'rb'))
+        if command == 'pogoda':
+            a = pogoda()
+            bot.sendMessage(chat_id, str(a))
+    
     if content_type == 'photo':
         print(msg)
         try:
@@ -71,9 +73,19 @@ def handle(msg):
             bot.sendMessage(chat_id, str(e))
             print(e)
 
-    
+def pogoda():
+    weather = Weather(unit=Unit.CELSIUS)
 
-bot=telepot.Bot('522725344:AAGyVp0GjWPzYvW_BKaL3qBEj-ibOiXxwWY') #@RaspberrySerjTestBot
+    location = weather.lookup_by_location('moscow')
+    forecasts = location.forecast
+    n = 0
+    for forecast in forecasts:
+        while n < 1:
+           pogoda_last = [forecast.text, forecast.date, forecast.high]
+           n+=1
+    return pogoda_last
+
+bot = telepot.Bot('522725344:AAGyVp0GjWPzYvW_BKaL3qBEj-ibOiXxwWY') #@RaspberrySerjTestBot
 print(bot.getMe())
 
 MessageLoop(bot, handle).run_as_thread()
